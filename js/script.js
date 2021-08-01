@@ -1,13 +1,16 @@
 'use strict';
 let text;
 
+function clearForm() {
+    document.getElementById('out').innerHTML = ``;
+}
+
 function readFile(object) {
     var file = object.files[0];
     var reader = new FileReader();
     reader.onload = function () {
         text = JSON.parse(reader.result);
         //alert(text.buttons[0].text);
-
         function makeForm(obj) {
             for (let key in obj) {
                 if (typeof (obj[key]) === 'object') {
@@ -17,20 +20,43 @@ function readFile(object) {
                 switch (key) {
                     case "label":
                         document.getElementById('out').innerHTML += `
-                    <span class="input-group-text" >` + obj[key] + `</span>`;
+                    <label class="input-group-text" >` + obj[key] + `</label>`;
                         break;
                     case "input":
                         let placeholder = (obj[key].placeholder) ? (` placeholder="` + obj[key].placeholder + `"`) : "";
                         let checked = (obj[key].checked) ? (` cheked="` + obj[key].checked + `"`) : "";
                         let required = (obj[key].required) ? ` required` : "";
+                        let list = (obj[key].colors) ? (` list="presetColors"`) : "";
+                        let datalist = (obj[key].colors) ? (`
+                        <datalist id="presetColors">`) : "";
+                        if (datalist != "") {
+                            for (let i = 0; i < obj[key].colors.length; i++) {
+                                datalist += `\n<option>` + obj[key].colors[i] + `</option>/>`;
+                            }
+                        }
+                        let clas = "";
+                        if (datalist != "") {
+                            datalist += `\n </datalist>`;
+                        }
+                        switch (obj[key].type) {
+                            case "color":
+                                clas = `" form-control form-control-color"`;
+                                break;
+                            case "checkbox":
+                                clas = `" form-check-input"`;
+                                break;
+                            default:
+                                clas = `" form-control"`;
+                        }
+                        //let clas = (obj[key].checked) ? (`"form-check-input"`):(`"form-control"`);
 
                         document.getElementById('out').innerHTML += `
-                    <input type="` + obj[key].type + `" class="form-control" ` +
-                            placeholder + checked + required + ` id="basic-url">`;
+                    <input type="` + obj[key].type + `" class=` + clas +
+                            placeholder + checked + required + list + ` id="basic-url">` + datalist;
                         break;
 
                     case "references":
-                        obj.key.forEach((obj) => {
+                        obj[key].forEach((obj) => {
                             for (let key in obj) {
                                 switch (key) {
                                     case "text":
@@ -44,7 +70,19 @@ function readFile(object) {
                                 }
                             }
                         });
-                    break;
+                        break;
+                    case "buttons":
+                        obj[key].forEach((obj) => {
+                            for (let key in obj) {
+                                switch (key) {
+                                    case "text":
+                                        document.getElementById('out').innerHTML += `
+                            <br><button class="btn btn-primary mt-3">` + obj[key] + `</button>`;
+                                        break;
+                                }
+                            }
+                        });
+
                         /* default:
                           alert( "Нет таких значений" );*/
                 }
@@ -55,3 +93,5 @@ function readFile(object) {
     };
     reader.readAsText(file);
 }
+
+//document.getElementById('out').innerHTML += ``;
