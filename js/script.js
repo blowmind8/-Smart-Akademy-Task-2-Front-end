@@ -10,6 +10,7 @@ function readFile(object) {
     var reader = new FileReader();
     reader.onload = function () {
         text = JSON.parse(reader.result);
+
         function makeForm(obj) {
             for (let key in obj) {
                 if (typeof (obj[key]) === 'object') {
@@ -18,8 +19,9 @@ function readFile(object) {
 
                 switch (key) {
                     case "label":
+                        let checkboxClass = (obj.input.type == "checkbox") ? (`" form-check-label"`) :(`" input-group-text"`);
                         document.getElementById('out').innerHTML += `
-                    <label class="input-group-text" >` + obj[key] + `</label>`;
+                    <label class= ` + checkboxClass + ` >` + obj[key] + `</label>`;
                         break;
                     case "input":
                         let placeholder = (obj[key].placeholder) ? (` placeholder="` + obj[key].placeholder + `"`) : "";
