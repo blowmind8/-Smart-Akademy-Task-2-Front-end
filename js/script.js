@@ -39,20 +39,23 @@ function readFile(object) {
                         if (datalist != "") {
                             datalist += `\n </datalist>`;
                         }
+
+                        let checkboxBr = ""; 
                         switch (obj[key].type) {
                             case "color":
-                                clas = `" form-control form-control-color"`;
+                                clas = `" form-control form-control-color"`;                          
                                 break;
                             case "checkbox":
                                 clas = `" form-check-input"`;
+                                checkboxBr='<br>';
                                 break;
                             default:
                                 clas = `" form-control"`;
                         }
-
+                        
                         document.getElementById('out').innerHTML += `
-                    <input type="` + obj[key].type + `" class=` + clas +
-                            placeholder + checked + required + list + ` id="basic-url">` + datalist;
+                    `+checkboxBr+`<input type="` + obj[key].type + `" class=` + clas +
+                            placeholder + checked + required + list + ` ">` + datalist;
                         break;
 
                     case "references":
