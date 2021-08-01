@@ -10,7 +10,6 @@ function readFile(object) {
     var reader = new FileReader();
     reader.onload = function () {
         text = JSON.parse(reader.result);
-        //alert(text.buttons[0].text);
         function makeForm(obj) {
             for (let key in obj) {
                 if (typeof (obj[key]) === 'object') {
@@ -48,7 +47,6 @@ function readFile(object) {
                             default:
                                 clas = `" form-control"`;
                         }
-                        //let clas = (obj[key].checked) ? (`"form-check-input"`):(`"form-control"`);
 
                         document.getElementById('out').innerHTML += `
                     <input type="` + obj[key].type + `" class=` + clas +
@@ -83,8 +81,6 @@ function readFile(object) {
                             }
                         });
 
-                        /* default:
-                          alert( "Нет таких значений" );*/
                 }
 
             }
@@ -93,5 +89,3 @@ function readFile(object) {
     };
     reader.readAsText(file);
 }
-
-//document.getElementById('out').innerHTML += ``;
